@@ -1,0 +1,6 @@
+#root {
+  width: 100%; /* Chiếm toàn bộ chiều rộng */
+  min-height: 100%; /* Chiếm toàn bộ chiều cao */
+  margin: 0; /* Xóa căn giữa */
+  text-align: center;
+}

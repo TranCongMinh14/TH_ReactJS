@@ -1,0 +1,54 @@
+.container {
+  display: center;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+h1 {
+  color: green;
+  font-size: 50px;
+  text-align: center;
+}
+h3 {
+  display: block;
+  margin: 10px 0;
+  font-weight: bold;
+}
+button {
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  background-color: rgb(22, 19, 211);
+}
+
+.form-group {
+  display: flex;
+  margin: 20px;
+}
+label {
+  color: red;
+  width: 30%;
+  text-align: left;
+}
