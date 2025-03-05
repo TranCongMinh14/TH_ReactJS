@@ -1,0 +1,162 @@
+/* ==== Global Styles ==== */
+body {
+  font-family: "Arial", sans-serif;
+  background-color:rgb(255, 255, 255);
+  margin-top: 100px;
+  padding: 10px;
+  text-color: #333333;
+}
+
+/* ==== Profile Container ==== */
+.profile-container {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-info h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 100px;
+}
+
+.subscribers {
+  color: #ff5a5f;
+}
+
+.share-btn {
+  background: #ff5a5f;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.share-btn:hover {
+  background: #e04e52;
+}
+
+/* ==== Tabs Navigation ==== */
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  background: #ffffff; 
+  color: #f44b87;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.tabs .active {
+  background: #fef0f5;
+  color: #ff5a5f;
+  border-bottom: 2px solid #ff5a5f;
+}
+
+/* ==== Recipe Grid ==== */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.recipe-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.recipe-card:hover {
+  transform: scale(1.05);
+}
+
+.recipe-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+.recipe-card h3 {
+  font-size: 16px;
+  margin: 10px ;
+  text-align: left;
+}
+
+.recipe-card .bookmark {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: white;
+  border-radius: 50%;
+  padding: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.recipe-card .time-badge {
+  background: #fef0f5;
+  width: 60px;
+  height:15px;
+  color: #ff5a5f;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  position: relative;
+  bottom: 10px;
+  left: 10px;
+}
+
+/* ==== Pagination ==== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border: none;
+  background: #ddd;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.pagination .active {
+  background: #ff5a5f;
+  color: white;
+}
