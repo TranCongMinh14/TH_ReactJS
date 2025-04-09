@@ -1,13 +1,14 @@
-import React from 'react';
-import Logo from '../assets/img/Logo.png'; 
+import React from "react";
+import { NavLink } from "react-router-dom";
+import Logo from "../assets/img/Logo.png";
 // Import các icon dưới dạng tài nguyên tĩnh
-import DashboardIcon from '../assets/img/SquaresFour1.png'; // Đổi tên file không có khoảng trắng
-import ProjectsIcon from '../assets/img/Folder.png';
-import TeamsIcon from '../assets/img/Groups.png';
-import AnalyticsIcon from '../assets/img/PieChart.png'; // Đổi tên file không có khoảng trắng
-import MessagesIcon from '../assets/img/Chat.png';
-import IntegrationsIcon from '../assets/img/Code.png';
-import Banner from '../assets/img/Banner.png'; // Thay bằng ảnh quảng cáo V2.0
+import DashboardIcon from "../assets/img/SquaresFour1.png";
+import ProjectsIcon from "../assets/img/Folder.png";
+import TeamsIcon from "../assets/img/Groups.png";
+import AnalyticsIcon from "../assets/img/PieChart.png";
+import MessagesIcon from "../assets/img/Chat.png";
+import IntegrationsIcon from "../assets/img/Code.png";
+import Banner from "../assets/img/Banner.png";
 
 const Sidebar = () => {
   return (
@@ -15,32 +16,88 @@ const Sidebar = () => {
       {/* Logo và Menu */}
       <div>
         <h2 className="p-4 text-xl font-bold text-gray-800 flex items-center">
-        <span className="mr-2 text-2xl"><img src={Logo} alt="logo" /></span>
+          <span className="mr-2 text-2xl">
+            <img src={Logo} alt="logo" className="w-full h-full" />
+          </span>
         </h2>
         <ul className="mt-4">
-          <li className="px-4 py-2 hover:bg-pink-100 cursor-pointer flex items-center bg-pink-100 text-pink-500">
-            <img src={DashboardIcon} alt="Dashboard Icon" className="w-5 h-5 mr-2" />
-            Dashboard
+          <li>
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                isActive
+                  ? "px-4 py-2 bg-pink-100 text-pink-500 flex items-center"
+                  : "px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center"
+              }
+            >
+              <img src={DashboardIcon} alt="Dashboard Icon" className="w-5 h-5 mr-2" />
+              Dashboard
+            </NavLink>
           </li>
-          <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center">
-            <img src={ProjectsIcon} alt="Projects Icon" className="w-5 h-5 mr-2" />
-            Projects
+          <li>
+            <NavLink
+              to="/projects"
+              className={({ isActive }) =>
+                isActive
+                  ? "px-4 py-2 bg-pink-100 text-pink-500 flex items-center"
+                  : "px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center"
+              }
+            >
+              <img src={ProjectsIcon} alt="Projects Icon" className="w-5 h-5 mr-2" />
+              Projects
+            </NavLink>
           </li>
-          <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center">
-            <img src={TeamsIcon} alt="Teams Icon" className="w-5 h-5 mr-2" />
-            Teams
+          <li>
+            <NavLink
+              to="/teams"
+              className={({ isActive }) =>
+                isActive
+                  ? "px-4 py-2 bg-pink-100 text-pink-500 flex items-center"
+                  : "px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center"
+              }
+            >
+              <img src={TeamsIcon} alt="Teams Icon" className="w-5 h-5 mr-2" />
+              Teams
+            </NavLink>
           </li>
-          <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center">
-            <img src={AnalyticsIcon} alt="Analytics Icon" className="w-5 h-5 mr-2" />
-            Analytics
+          <li>
+            <NavLink
+              to="/analytics"
+              className={({ isActive }) =>
+                isActive
+                  ? "px-4 py-2 bg-pink-100 text-pink-500 flex items-center"
+                  : "px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center"
+              }
+            >
+              <img src={AnalyticsIcon} alt="Analytics Icon" className="w-5 h-5 mr-2" />
+              Analytics
+            </NavLink>
           </li>
-          <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center">
-            <img src={MessagesIcon} alt="Messages Icon" className="w-5 h-5 mr-2" />
-            Messages
+          <li>
+            <NavLink
+              to="/messages"
+              className={({ isActive }) =>
+                isActive
+                  ? "px-4 py-2 bg-pink-100 text-pink-500 flex items-center"
+                  : "px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center"
+              }
+            >
+              <img src={MessagesIcon} alt="Messages Icon" className="w-5 h-5 mr-2" />
+              Messages
+            </NavLink>
           </li>
-          <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center">
-            <img src={IntegrationsIcon} alt="Integrations Icon" className="w-5 h-5 mr-2" />
-            Integrations
+          <li>
+            <NavLink
+              to="/integrations"
+              className={({ isActive }) =>
+                isActive
+                  ? "px-4 py-2 bg-pink-100 text-pink-500 flex items-center"
+                  : "px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center"
+              }
+            >
+              <img src={IntegrationsIcon} alt="Integrations Icon" className="w-5 h-5 mr-2" />
+              Integrations
+            </NavLink>
           </li>
         </ul>
       </div>

@@ -170,7 +170,7 @@ const ReportTable = () => {
 
           // Nút Next
           paginationHtml += `<span class="paginate_button next ${
-            pageInfo.page === totalPages - 1 ? "disabled" : ""
+            pageInfo.page === totalPages - 1 ? "disabled" : " "
           } px-2 py-1 text-gray-600 text-sm rounded-full transition-all">→</span>`;
 
           $(tableRef.current)

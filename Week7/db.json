@@ -56,6 +56,42 @@
       "orderValue": "$922",
       "orderDate": "10/06/2023",
       "status": "Completed"
+    },
+    {
+      "id": 7,
+      "customerName": "Hailey Adams",
+      "avatar": "src/assets/img/avatar6.png",
+      "company": "FlowRush",
+      "orderValue": "$922",
+      "orderDate": "10/06/2023",
+      "status": "Completed"
+    },
+    {
+      "id": 8,
+      "customerName": "Hailey Adams",
+      "avatar": "src/assets/img/avatar6.png",
+      "company": "FlowRush",
+      "orderValue": "$922",
+      "orderDate": "10/06/2023",
+      "status": "Completed"
+    },
+    {
+      "id": 9,
+      "customerName": "Hailey Adams",
+      "avatar": "src/assets/img/avatar6.png",
+      "company": "FlowRush",
+      "orderValue": "$922",
+      "orderDate": "10/06/2023",
+      "status": "Completed"
+    },
+    {
+      "id": 10,
+      "customerName": "Hailey Adams",
+      "avatar": "src/assets/img/avatar6.png",
+      "company": "FlowRush",
+      "orderValue": "$922",
+      "orderDate": "10/06/2023",
+      "status": "Completed"
     }
   ]
 }
