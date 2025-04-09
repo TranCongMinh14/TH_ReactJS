@@ -1,5 +1,6 @@
 import React from 'react';
 import Overview from './Overview';
+import ReportTable from './ReportTable';
 import './Dashboard.css';
 import imgQuestion from '../assets/img/Question 1.png';
 import imgAvt from '../assets/img/Avatar.png';
@@ -48,38 +49,14 @@ function Dashboard() {
             <Overview />
           </div>
           <div className="report">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Detailed Report</h3>
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="p-3 text-left text-gray-600">Customer Name</th>
-                  <th className="p-3 text-left text-gray-600">Company</th>
-                  <th className="p-3 text-left text-gray-600">Order Value</th>
-                  <th className="p-3 text-left text-gray-600">Order Date</th>
-                  <th className="p-3 text-left text-gray-600">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b">
-                  <td className="p-3">Elizabeth Lee</td>
-                  <td className="p-3">AvatarSystems</td>
-                  <td className="p-3">$559</td>
-                  <td className="p-3">10/07/2023</td>
-                  <td className="p-3">
-                    <span className="px-2 py-1 bg-blue-100 text-blue-600 rounded-full text-xs">New</span>
-                  </td>
-                </tr>
-                <tr className="border-b">
-                  <td className="p-3">Carlos Garcia</td>
-                  <td className="p-3">SmoozaShift</td>
-                  <td className="p-3">$747</td>
-                  <td className="p-3">24/07/2023</td>
-                  <td className="p-3">
-                    <span className="px-2 py-1 bg-blue-100 text-blue-600 rounded-full text-xs">New</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-800">Detailed Report</h3>
+              <div className="flex space-x-2">
+                <button className="px-3 py-1 border rounded-lg text-gray-600">Import</button>
+                <button className="px-3 py-1 bg-pink-500 text-white rounded-lg">Export</button>
+              </div>
+            </div>
+            <ReportTable />
           </div>
         </main>
       </div>

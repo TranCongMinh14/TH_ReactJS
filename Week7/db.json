@@ -10,5 +10,61 @@
     "newCustomer": {
       "value": "298",
       "change": "6.4% period of change"
-    }
+    },
+    "orders": [
+      {
+        "id": 1,
+        "customerName": "Elizabeth Lee",
+        "avatar": "https://i.pravatar.cc/150?img=1",
+        "company": "AvatarSystems",
+        "orderValue": "$559",
+        "orderDate": "10/07/2023",
+        "status": "New"
+      },
+      {
+        "id": 2,
+        "customerName": "Carlos Garcia",
+        "avatar": "https://i.pravatar.cc/150?img=2",
+        "company": "SmoozaShift",
+        "orderValue": "$747",
+        "orderDate": "24/07/2023",
+        "status": "New"
+      },
+      {
+        "id": 3,
+        "customerName": "Elizabeth Bailey",
+        "avatar": "https://i.pravatar.cc/150?img=3",
+        "company": "Prime Time Telecom",
+        "orderValue": "$564",
+        "orderDate": "08/08/2023",
+        "status": "In-progress"
+      },
+      {
+        "id": 4,
+        "customerName": "Ryan Brown",
+        "avatar": "https://i.pravatar.cc/150?img=4",
+        "company": "OmniTech Corporation",
+        "orderValue": "$841",
+        "orderDate": "31/08/2023",
+        "status": "In-progress"
+      },
+      {
+        "id": 5,
+        "customerName": "Ryan Young",
+        "avatar": "https://i.pravatar.cc/150?img=5",
+        "company": "DataStream Inc.",
+        "orderValue": "$798",
+        "orderDate": "15/09/2023",
+        "status": "Completed"
+      },
+      {
+        "id": 6,
+        "customerName": "Hailey Adams",
+        "avatar": "https://i.pravatar.cc/150?img=6",
+        "company": "FlowRush",
+        "orderValue": "$522",
+        "orderDate": "22/09/2023",
+        "status": "Completed"
+      }
+    ]
   }

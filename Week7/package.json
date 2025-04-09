@@ -10,8 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.1.1",
     "axios": "^1.8.4",
+    "datatables.net": "^2.2.2",
+    "datatables.net-dt": "^2.2.2",
+    "datatables.net-select": "^3.0.0",
+    "datatables.net-select-dt": "^3.0.0",
+    "jquery": "^3.7.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.1.1"
