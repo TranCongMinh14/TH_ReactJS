@@ -1,4 +1,3 @@
-// ReportTable.js
 import React, { useEffect, useRef, useState } from "react";
 import $ from "jquery";
 import "datatables.net";
@@ -39,17 +38,17 @@ const ReportTable = () => {
         columns: [
           {
             title:
-              '<input type="checkbox" id="select-all" class="ml-2 w-5 h-5" />', // Thêm checkbox "Chọn tất cả" vào header
+              '<input type="checkbox" id="select-all" class="ml-2 w-5 h-5" />',
             data: null,
             orderable: false,
-            className: "select-checkbox w-12 text-left", // Căn trái cột checkbox
+            className: "select-checkbox w-12 text-left",
             render: () =>
-              '<input type="checkbox" class="ml-2 w-5 h-5 row-checkbox" />', // Checkbox cho từng hàng
+              '<input type="checkbox" class="ml-2 w-5 h-5 row-checkbox" />',
           },
           {
             title: "CUSTOMER NAME",
             data: null,
-            className: "py-3 px-4 text-gray-700 text-left", // Căn trái
+            className: "py-3 px-4 text-gray-700 text-left",
             render: (data) =>
               `<div class="flex items-center space-x-2">
                 <img src="${data.avatar}" alt="${data.customerName}" class="w-8 h-8 rounded-full" />
@@ -59,22 +58,22 @@ const ReportTable = () => {
           {
             title: "COMPANY",
             data: "company",
-            className: "py-3 px-4 text-gray-700 text-left", // Căn trái
+            className: "py-3 px-4 text-gray-700 text-left",
           },
           {
             title: "ORDER VALUE",
             data: "orderValue",
-            className: "py-3 px-4 text-gray-700 text-left", // Căn trái
+            className: "py-3 px-4 text-gray-700 text-left",
           },
           {
             title: "ORDER DATE",
             data: "orderDate",
-            className: "py-3 px-4 text-gray-700 text-left", // Căn trái
+            className: "py-3 px-4 text-gray-700 text-left",
           },
           {
             title: "STATUS",
             data: "status",
-            className: "py-3 px-4 text-center", // Căn giữa cột Status
+            className: "py-3 px-4 text-center",
             render: (data) => {
               const colorClass =
                 data === "New"
@@ -89,7 +88,7 @@ const ReportTable = () => {
             title: "",
             data: null,
             orderable: false,
-            className: "py-3 px-4 w-12 text-left", // Căn trái cột Edit
+            className: "py-3 px-4 w-12 text-left",
             render: () =>
               `<button class="edit-btn text-gray-600 hover:text-gray-800">
                  <img className="mr-1" src=${EditIcon} alt="EditIcon" />
@@ -97,19 +96,19 @@ const ReportTable = () => {
           },
         ],
         columnDefs: [
-          { width: "5%", targets: 0 }, // Checkbox
-          { width: "25%", targets: 1 }, // Customer Name
-          { width: "25%", targets: 2 }, // Company
-          { width: "15%", targets: 3 }, // Order Value
-          { width: "15%", targets: 4 }, // Order Date
-          { width: "15%", targets: 5 }, // Status
-          { width: "5%", targets: 6 }, // Edit
+          { width: "5%", targets: 0 },
+          { width: "25%", targets: 1 },
+          { width: "25%", targets: 2 },
+          { width: "15%", targets: 3 },
+          { width: "15%", targets: 4 },
+          { width: "15%", targets: 5 },
+          { width: "5%", targets: 6 },
         ],
         select: {
           style: "multi",
           selector: 'td:first-child input[type="checkbox"].row-checkbox',
         },
-        order: [[4, "asc"]], // Sắp xếp theo Order Date tăng dần để khớp với hình ảnh mong muốn
+        order: [[4, "asc"]],
         pageLength: 5,
         responsive: true,
         language: {
@@ -125,19 +124,20 @@ const ReportTable = () => {
         },
         dom: 'rt<"flex justify-between items-center mt-4"<"text-gray-600"i><"flex space-x-2"p>>',
         drawCallback: function (settings) {
-          // Tùy chỉnh giao diện phân trang để hiển thị "← 1 2 3 4 ... 10 11 →"
           const api = this.api();
           const pageInfo = api.page.info();
           const totalPages = pageInfo.pages;
           let paginationHtml = "";
 
           // Nút Previous
-          paginationHtml += `<span class="paginate_button previous ${
-            pageInfo.page === 0 ? "disabled" : ""
-          } px-2 py-1 text-gray-600 text-sm rounded-full transition-all"></span>`;
+          paginationHtml += `
+            <span class="paginate_button previous ${
+              pageInfo.page === 0 ? "disabled text-gray-300" : "text-pink-500"
+            } px-2 py-1 rounded-full transition-all">←</span>
+          `;
 
-          // Các nút số trang
-          const maxPagesToShow = 4;
+          // Logic hiển thị số trang
+          const maxPagesToShow = 5; // Số trang tối đa hiển thị trước khi thêm "..."
           let startPage = Math.max(
             0,
             pageInfo.page - Math.floor(maxPagesToShow / 2)
@@ -147,39 +147,60 @@ const ReportTable = () => {
             startPage + maxPagesToShow - 1
           );
 
+          // Điều chỉnh startPage nếu endPage không đủ số lượng trang
           if (endPage - startPage + 1 < maxPagesToShow) {
             startPage = Math.max(0, endPage - maxPagesToShow + 1);
           }
 
-          for (let i = startPage; i <= endPage; i++) {
-            paginationHtml += `<span class="paginate_button ${
-              i === pageInfo.page ? "current" : ""
-            } px-2 py-1 text-gray-600 text-sm rounded-full transition-all ${
-              i === pageInfo.page ? "bg-pink-500 text-white" : ""
-            }">${i + 1}</span>`;
+          // Thêm dấu "..." ở đầu nếu không bắt đầu từ trang 0
+          if (startPage > 0) {
+            paginationHtml += `
+              <span class="paginate_button px-2 py-1 text-gray-600 text-sm rounded-full transition-all">1</span>
+            `;
+            if (startPage > 1) {
+              paginationHtml += `
+                <span class="paginate_button px-2 py-1 text-gray-600 text-sm rounded-full transition-all">...</span>
+              `;
+            }
           }
 
-          // Dấu "..." nếu có nhiều trang hơn
+          // Hiển thị các số trang
+          for (let i = startPage; i <= endPage; i++) {
+            paginationHtml += `
+              <span class="paginate_button ${
+                i === pageInfo.page ? "bg-pink-500 text-white" : "text-gray-600"
+              } px-2 py-1 text-sm rounded-full transition-all">${i + 1}</span>
+            `;
+          }
+
+          // Thêm dấu "..." ở cuối nếu không hiển thị hết các trang
           if (endPage < totalPages - 1) {
-            paginationHtml += `<span class="paginate_button px-2 py-1 text-gray-600 text-sm rounded-full transition-all">...</span>`;
-            paginationHtml += `<span class="paginate_button px-2 py-1 text-gray-600 text-sm rounded-full transition-all">${
-              totalPages - 1
-            }</span>`;
-            paginationHtml += `<span class="paginate_button px-2 py-1 text-gray-600 text-sm rounded-full transition-all">${totalPages}</span>`;
+            if (endPage < totalPages - 2) {
+              paginationHtml += `
+                <span class="paginate_button px-2 py-1 text-gray-600 text-sm rounded-full transition-all">...</span>
+              `;
+            }
+            paginationHtml += `
+              <span class="paginate_button px-2 py-1 text-gray-600 text-sm rounded-full transition-all">${totalPages}</span>
+            `;
           }
 
           // Nút Next
-          paginationHtml += `<span class="paginate_button next ${
-            pageInfo.page === totalPages - 1 ? "disabled" : " "
-          } px-2 py-1 text-gray-600 text-sm rounded-full transition-all">→</span>`;
+          paginationHtml += `
+            <span class="paginate_button next ${
+              pageInfo.page === totalPages - 1
+                ? "disabled text-gray-300"
+                : "text-pink-500"
+            } px-2 py-1 rounded-full transition-all">→</span>
+          `;
 
+          // Gắn HTML phân trang vào DOM
           $(tableRef.current)
             .closest(".dataTables_wrapper")
             .find(".dataTables_paginate")
             .html(paginationHtml);
         },
         initComplete: function () {
-          // Xử lý sự kiện cho checkbox "Chọn tất cả"
           const table = this.api();
           $("#select-all").on("change", function () {
             const isChecked = $(this).is(":checked");
@@ -195,7 +216,6 @@ const ReportTable = () => {
             });
           });
 
-          // Xử lý sự kiện cho checkbox từng hàng
           $(tableRef.current).on("change", "input.row-checkbox", function () {
             const row = $(this).closest("tr");
             if ($(this).is(":checked")) {
@@ -204,7 +224,6 @@ const ReportTable = () => {
               row.removeClass("selected bg-blue-200");
             }
 
-            // Cập nhật trạng thái checkbox "Chọn tất cả"
             const allChecked = table.rows().every(function () {
               return $(this.node()).find("input.row-checkbox").is(":checked");
             });
@@ -217,6 +236,7 @@ const ReportTable = () => {
         },
       });
 
+      // Tùy chỉnh giao diện
       $(tableRef.current)
         .closest(".dataTables_wrapper")
         .find("thead th")
