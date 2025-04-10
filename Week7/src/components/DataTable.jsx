@@ -2,13 +2,14 @@
 import React, { useEffect, useState, useMemo, memo } from "react";
 import axios from "axios";
 import Pagination from "./Pagination";
+import CustomerModal from "./CustomerModal";
 
 // Use React.memo to prevent unnecessary re-renders
 const DataTable = memo(() => {
   const [customers, setCustomers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [editUser, setEditUser] = useState(null);
+  const [editUser, setEditUser] = useState(null); // null: không có modal, object: edit, "new": add new
   const [selectedCustomers, setSelectedCustomers] = useState([]);
   const [formData, setFormData] = useState({
     customerName: "",
@@ -16,6 +17,7 @@ const DataTable = memo(() => {
     orderValue: "",
     orderDate: "",
     status: "",
+    avatar: "",
   });
   const [errors, setErrors] = useState({});
   const rowsPerPage = 6;
@@ -62,104 +64,65 @@ const DataTable = memo(() => {
       orderValue: customer.orderValue.replace("$", ""),
       orderDate: formatDateToInput(customer.orderDate),
       status: customer.status,
+      avatar: customer.avatar, // Bao gồm avatar khi edit
     });
     setEditUser(customer);
     setErrors({});
   };
 
-  // Handle input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    validateField(name, value);
-  };
-
-  // Validate individual fields
-  const validateField = (name, value) => {
-    let newErrors = { ...errors };
-
-    switch (name) {
-      case "customerName":
-        if (!value.trim()) newErrors.customerName = "Customer name is required";
-        else delete newErrors.customerName;
-        break;
-      case "company":
-        if (!value.trim()) newErrors.company = "Company name is required";
-        else delete newErrors.company;
-        break;
-      case "orderValue":
-        if (!value || Number(value) <= 0)
-          newErrors.orderValue = "Order value must be greater than 0";
-        else delete newErrors.orderValue;
-        break;
-      case "orderDate":
-        if (!value) newErrors.orderDate = "Order date is required";
-        else delete newErrors.orderDate;
-        break;
-      case "status":
-        if (!value) newErrors.status = "Status is required";
-        else delete newErrors.status;
-        break;
-      default:
-        break;
-    }
-
-    setErrors(newErrors);
-  };
-
-  // Check if form is valid
-  const isFormValid = () => {
-    return (
-      formData.customerName.trim() &&
-      formData.company.trim() &&
-      formData.orderValue &&
-      Number(formData.orderValue) > 0 &&
-      formData.orderDate &&
-      formData.status &&
-      Object.keys(errors).length === 0
-    );
+  // Open add new user modal
+  const openAddNewModal = () => {
+    setFormData({
+      customerName: "",
+      company: "",
+      orderValue: "",
+      orderDate: "",
+      status: "",
+      avatar: "", // Khởi tạo avatar rỗng
+    });
+    setEditUser("new");
+    setErrors({});
   };
 
   // Handle save action
-  const handleSave = async () => {
-    if (!isFormValid()) {
-      validateField("customerName", formData.customerName);
-      validateField("company", formData.company);
-      validateField("orderValue", formData.orderValue);
-      validateField("orderDate", formData.orderDate);
-      validateField("status", formData.status);
-      return;
-    }
-
-    const originalCustomer = customers.find((cus) => cus.id === formData.id);
+  const handleSave = async (data) => {
     const updatedCustomer = {
-      ...formData,
-      avatar: originalCustomer?.avatar || "",
-      orderValue: `$${formData.orderValue}`,
-      orderDate: formatDateToDisplay(formData.orderDate),
+      ...data,
+      orderValue: `$${data.orderValue}`,
+      orderDate: formatDateToDisplay(data.orderDate),
+      avatar: data.avatar || "src/assets/img/avatar313.png", // Giá trị mặc định nếu không có avatar
     };
 
     try {
-      await axios.put(
-        `http://localhost:3001/customers/${editUser.id}`,
-        updatedCustomer
-      );
-      alert("Customer updated successfully!");
+      if (editUser === "new") {
+        // Add new customer
+        const response = await axios.post(
+          "http://localhost:3001/customers",
+          updatedCustomer
+        );
+        setCustomers((prev) => [...prev, response.data]); // Thêm customer mới vào danh sách
+        alert("Customer added successfully!");
+      } else {
+        // Edit existing customer
+        await axios.put(
+          `http://localhost:3001/customers/${editUser.id}`,
+          updatedCustomer
+        );
+        setCustomers((prev) =>
+          prev.map((cus) => (cus.id === editUser.id ? updatedCustomer : cus))
+        );
+        alert("Customer updated successfully!");
+      }
       closeModal();
-      // Reload dữ liệu sau khi nhấn OK trên alert
-      await fetchCustomers();
     } catch (error) {
-      let errorMessage = "Failed to update customer.";
+      let errorMessage = "Failed to save customer.";
       if (error.response?.status === 404) {
         errorMessage = "Customer not found on the server.";
         await fetchCustomers(); // Reload dữ liệu nếu không tìm thấy
       } else {
         errorMessage = error.response?.data.message || error.message;
       }
-      console.error("Update failed:", errorMessage);
+      console.error("Save failed:", errorMessage);
       alert(`Error: ${errorMessage}`);
     }
   };
@@ -173,6 +136,7 @@ const DataTable = memo(() => {
       orderValue: "",
       orderDate: "",
       status: "",
+      avatar: "",
     });
     setErrors({});
   };
@@ -225,7 +189,17 @@ const DataTable = memo(() => {
           Detailed report
         </h2>
         <div className="flex gap-4 items-center">
-          
+          <button
+            onClick={openAddNewModal}
+            className="flex items-center gap-2 border border-pink-500 text-pink-500 px-4 py-1.5 rounded-lg text-sm hover:bg-pink-400 hover:text-white cursor-pointer"
+          >
+            <img
+              src="src/assets/img/ReportIcon.png"
+              alt="icon"
+              className="w-4 h-4"
+            />
+            Add new user
+          </button>
           <div className="flex gap-2">
             <button className="flex items-center gap-2 border border-pink-500 text-pink-500 px-4 py-1.5 rounded-lg text-sm hover:bg-pink-50">
               <img
@@ -249,7 +223,7 @@ const DataTable = memo(() => {
 
       <div className="overflow-x-auto border">
         <table className="min-w-full text-sm">
-          <thead className="bg-gray-300 text-gray-600 uppercase text-xs">
+          <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
             <tr>
               <th className="p-3 text-left">
                 <input
@@ -335,149 +309,14 @@ const DataTable = memo(() => {
       />
 
       {editUser && (
-        <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 transition-all">
-          <div className="bg-white p-8 rounded-xl shadow-2xl max-w-lg mx-auto mt-24 border border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-              <span className="mr-2">📝</span> Edit Customer
-            </h2>
-            <form>
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                {/* Customer Name */}
-                <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">
-                    Customer Name
-                  </label>
-                  <input
-                    type="text"
-                    name="customerName"
-                    value={formData.customerName}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all ${
-                      errors.customerName ? "border-red-500" : "border-gray-300"
-                    }`}
-                    placeholder="Enter customer name"
-                  />
-                  {errors.customerName && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.customerName}
-                    </p>
-                  )}
-                </div>
-
-                {/* Company */}
-                <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">
-                    Company
-                  </label>
-                  <input
-                    type="text"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all ${
-                      errors.company ? "border-red-500" : "border-gray-300"
-                    }`}
-                    placeholder="Enter company name"
-                  />
-                  {errors.company && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.company}
-                    </p>
-                  )}
-                </div>
-
-                {/* Order Value */}
-                <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">
-                    Order Value
-                  </label>
-                  <input
-                    type="number"
-                    name="orderValue"
-                    value={formData.orderValue}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all ${
-                      errors.orderValue ? "border-red-500" : "border-gray-300"
-                    }`}
-                    placeholder="Enter order value"
-                  />
-                  {errors.orderValue && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.orderValue}
-                    </p>
-                  )}
-                </div>
-
-                {/* Order Date */}
-                <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">
-                    Order Date
-                  </label>
-                  <input
-                    type="date"
-                    name="orderDate"
-                    value={formData.orderDate}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all ${
-                      errors.orderDate ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.orderDate && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.orderDate}
-                    </p>
-                  )}
-                </div>
-
-                {/* Status */}
-                <div className="col-span-2">
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">
-                    Status
-                  </label>
-                  <select
-                    name="status"
-                    value={formData.status}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all ${
-                      errors.status ? "border-red-500" : "border-gray-300"
-                    }`}
-                  >
-                    <option value="">Select status</option>
-                    <option value="New">New</option>
-                    <option value="In-progress">In-progress</option>
-                    <option value="Completed">Completed</option>
-                  </select>
-                  {errors.status && (
-                    <p className="text-red-500 text-xs mt-1">{errors.status}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Buttons */}
-              <div className="flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSave}
-                  disabled={!isFormValid()}
-                  className={`px-5 py-2 rounded-lg transition-all duration-200 font-medium ${
-                    isFormValid()
-                      ? "bg-pink-500 text-white hover:bg-pink-600"
-                      : "bg-pink-300 text-gray-200 cursor-not-allowed"
-                  }`}
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <CustomerModal
+          editUser={editUser}
+          onSave={handleSave}
+          onClose={closeModal}
+          initialData={formData}
+          errors={errors}
+          setErrors={setErrors}
+        />
       )}
     </div>
   );

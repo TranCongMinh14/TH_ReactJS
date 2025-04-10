@@ -1,11 +1,11 @@
 import React from "react";
 import IconSearch from "../assets/img/Search.png";
-import IconNotification from "../assets/img/Bell.png"; // Thay bằng icon chuông
-import IconQuestion from "../assets/img/Question.png"; // Thay bằng icon dấu hỏi
-import IconAvatar from "../assets/img/Avatar313.png"; // Thay bằng icon dấu hỏi
+import IconNotification from "../assets/img/Bell.png"; 
+import IconQuestion from "../assets/img/Question.png"; 
+import IconAvatar from "../assets/img/Avatar313.png"; 
 const Header = () => {
   return (
-    <header className="p-4 bg-white shadow-sm flex justify-between items-center">
+    <header className="p-4 bg-white shadow-sm flex justify-between items-center ">
       <h2 className="text-2xl font-bold text-pink-600">Dashboard</h2>
       <div className="flex items-center space-x-4">
         <div className="relative">

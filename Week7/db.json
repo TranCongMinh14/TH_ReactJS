@@ -18,7 +18,7 @@
       "company": "SmoozeShift",
       "orderValue": "$900",
       "orderDate": "21/08/2025",
-      "status": "New",
+      "status": "In-progress",
       "avatar": "src/assets/img/avatar3.png"
     },
     {
@@ -605,6 +605,16 @@
       "orderValue": "$870",
       "orderDate": "05/06/2023",
       "status": "In-progress"
+    },
+    {
+      "id": "beb3",
+      "customerName": "Tran Cong Minh",
+      "company": "IUH .Inc",
+      "orderValue": "$1200",
+      "orderDate": "10/04/2025",
+      "status": "New",
+      "avatar": "src/assets/img/avatar2.png"
     }
+    
   ]
 }
