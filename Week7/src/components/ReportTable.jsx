@@ -1,272 +1,226 @@
-import React, { useEffect, useRef, useState } from "react";
-import $ from "jquery";
-import "datatables.net";
-import "datatables.net-dt";
-import "datatables.net-select";
+// src/components/DataTable.jsx
+import React, { useEffect, useState, useMemo, memo } from "react";
 import axios from "axios";
-import ReportIcon from "../assets/img/ReportIcon.png";
-import ImportIcon from "../assets/img/Import.png";
-import ExportIcon from "../assets/img/Export.png";
-import EditIcon from "../assets/img/Edit.png";
+import Pagination from "./Pagination";
+import Modal from "react-modal";
 
-const ReportTable = () => {
-  const tableRef = useRef(null);
+// Bind modal to app element for accessibility
+Modal.setAppElement("#root");
+
+// Use React.memo to prevent unnecessary re-renders
+const DataTable = memo(() => {
+  const [customers, setCustomers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false); // Replace editUser with modalIsOpen
+  const [selectedCustomers, setSelectedCustomers] = useState([]);
+  const [formData, setFormData] = useState({
+    id: "",
+    customerName: "",
+    company: "",
+    orderValue: "",
+    orderDate: "",
+    status: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [isSaving, setIsSaving] = useState(false);
+  const rowsPerPage = 6;
 
+  console.log("Rendering DataTable");
+
+  // Fetch customer list
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCustomers = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:3001/orders");
-        setData(response.data);
+        const response = await axios.get("http://localhost:3001/customers");
+        setCustomers(response.data);
       } catch (error) {
-        console.error("Error fetching orders:", error);
-        setData([]);
+        console.error("Failed to fetch customers:", error.message);
+        alert("Failed to load customers. Please check the server.");
       } finally {
         setLoading(false);
       }
     };
-
-    fetchData();
+    fetchCustomers();
   }, []);
 
-  useEffect(() => {
-    if (!loading && data.length > 0) {
-      const table = $(tableRef.current).DataTable({
-        data: data,
-        columns: [
-          {
-            title:
-              '<input type="checkbox" id="select-all" class="ml-2 w-5 h-5" />',
-            data: null,
-            orderable: false,
-            className: "select-checkbox w-12 text-left",
-            render: () =>
-              '<input type="checkbox" class="ml-2 w-5 h-5 row-checkbox" />',
-          },
-          {
-            title: "CUSTOMER NAME",
-            data: null,
-            className: "py-3 px-4 text-gray-700 text-left",
-            render: (data) =>
-              `<div class="flex items-center space-x-2">
-                <img src="${data.avatar}" alt="${data.customerName}" class="w-8 h-8 rounded-full" />
-                <span>${data.customerName}</span>
-              </div>`,
-          },
-          {
-            title: "COMPANY",
-            data: "company",
-            className: "py-3 px-4 text-gray-700 text-left",
-          },
-          {
-            title: "ORDER VALUE",
-            data: "orderValue",
-            className: "py-3 px-4 text-gray-700 text-left",
-          },
-          {
-            title: "ORDER DATE",
-            data: "orderDate",
-            className: "py-3 px-4 text-gray-700 text-left",
-          },
-          {
-            title: "STATUS",
-            data: "status",
-            className: "py-3 px-4 text-center",
-            render: (data) => {
-              const colorClass =
-                data === "New"
-                  ? "bg-blue-100 text-blue-600"
-                  : data === "In-progress"
-                  ? "bg-yellow-100 text-yellow-600"
-                  : "bg-green-100 text-green-600";
-              return `<span class="px-2 py-1 rounded-full text-xs ${colorClass}">${data}</span>`;
-            },
-          },
-          {
-            title: "",
-            data: null,
-            orderable: false,
-            className: "py-3 px-4 w-12 text-left",
-            render: () =>
-              `<button class="edit-btn text-gray-600 hover:text-gray-800">
-                 <img className="mr-1" src=${EditIcon} alt="EditIcon" />
-              </button>`,
-          },
-        ],
-        columnDefs: [
-          { width: "5%", targets: 0 },
-          { width: "25%", targets: 1 },
-          { width: "25%", targets: 2 },
-          { width: "15%", targets: 3 },
-          { width: "15%", targets: 4 },
-          { width: "15%", targets: 5 },
-          { width: "5%", targets: 6 },
-        ],
-        select: {
-          style: "multi",
-          selector: 'td:first-child input[type="checkbox"].row-checkbox',
-        },
-        order: [[4, "asc"]],
-        pageLength: 5,
-        responsive: true,
-        language: {
-          search: "",
-          searchPlaceholder: "Search orders...",
-          paginate: {
-            previous: '<span class="text-pink-500">←</span>',
-            next: '<span class="text-pink-500">→</span>',
-          },
-          info: "_TOTAL_ results",
-          infoEmpty: "0 results",
-          infoFiltered: "",
-        },
-        dom: 'rt<"flex justify-between items-center mt-4"<"text-gray-600"i><"flex space-x-2"p>>',
-        drawCallback: function (settings) {
-          const api = this.api();
-          const pageInfo = api.page.info();
-          const totalPages = pageInfo.pages;
-          let paginationHtml = "";
+  // Date format conversion
+  const formatDateToInput = (dateStr) => {
+    if (!dateStr) return "";
+    const [day, month, year] = dateStr.split("/");
+    return `${year}-${month}-${day}`;
+  };
 
-          // Nút Previous
-          paginationHtml += `
-            <span class="paginate_button previous ${
-              pageInfo.page === 0 ? "disabled text-gray-300" : "text-pink-500"
-            } px-2 py-1 rounded-full transition-all">←</span>
-          `;
+  const formatDateToDisplay = (dateStr) => {
+    if (!dateStr) return "";
+    const [year, month, day] = dateStr.split("-");
+    return `${day}/${month}/${year}`;
+  };
 
-          // Logic hiển thị số trang
-          const maxPagesToShow = 5; // Số trang tối đa hiển thị trước khi thêm "..."
-          let startPage = Math.max(
-            0,
-            pageInfo.page - Math.floor(maxPagesToShow / 2)
-          );
-          let endPage = Math.min(
-            totalPages - 1,
-            startPage + maxPagesToShow - 1
-          );
-
-          // Điều chỉnh startPage nếu endPage không đủ số lượng trang
-          if (endPage - startPage + 1 < maxPagesToShow) {
-            startPage = Math.max(0, endPage - maxPagesToShow + 1);
-          }
-
-          // Thêm dấu "..." ở đầu nếu không bắt đầu từ trang 0
-          if (startPage > 0) {
-            paginationHtml += `
-              <span class="paginate_button px-2 py-1 text-gray-600 text-sm rounded-full transition-all">1</span>
-            `;
-            if (startPage > 1) {
-              paginationHtml += `
-                <span class="paginate_button px-2 py-1 text-gray-600 text-sm rounded-full transition-all">...</span>
-              `;
-            }
-          }
-
-          // Hiển thị các số trang
-          for (let i = startPage; i <= endPage; i++) {
-            paginationHtml += `
-              <span class="paginate_button ${
-                i === pageInfo.page ? "bg-pink-500 text-white" : "text-gray-600"
-              } px-2 py-1 text-sm rounded-full transition-all">${i + 1}</span>
-            `;
-          }
-
-          // Thêm dấu "..." ở cuối nếu không hiển thị hết các trang
-          if (endPage < totalPages - 1) {
-            if (endPage < totalPages - 2) {
-              paginationHtml += `
-                <span class="paginate_button px-2 py-1 text-gray-600 text-sm rounded-full transition-all">...</span>
-              `;
-            }
-            paginationHtml += `
-              <span class="paginate_button px-2 py-1 text-gray-600 text-sm rounded-full transition-all">${totalPages}</span>
-            `;
-          }
-
-          // Nút Next
-          paginationHtml += `
-            <span class="paginate_button next ${
-              pageInfo.page === totalPages - 1
-                ? "disabled text-gray-300"
-                : "text-pink-500"
-            } px-2 py-1 rounded-full transition-all">→</span>
-          `;
-
-          // Gắn HTML phân trang vào DOM
-          $(tableRef.current)
-            .closest(".dataTables_wrapper")
-            .find(".dataTables_paginate")
-            .html(paginationHtml);
-        },
-        initComplete: function () {
-          const table = this.api();
-          $("#select-all").on("change", function () {
-            const isChecked = $(this).is(":checked");
-            table.rows().every(function () {
-              const row = $(this.node());
-              const checkbox = row.find("input.row-checkbox");
-              checkbox.prop("checked", isChecked);
-              if (isChecked) {
-                row.addClass("selected bg-blue-200");
-              } else {
-                row.removeClass("selected bg-blue-200");
-              }
-            });
-          });
-
-          $(tableRef.current).on("change", "input.row-checkbox", function () {
-            const row = $(this).closest("tr");
-            if ($(this).is(":checked")) {
-              row.addClass("selected bg-blue-200");
-            } else {
-              row.removeClass("selected bg-blue-200");
-            }
-
-            const allChecked = table.rows().every(function () {
-              return $(this.node()).find("input.row-checkbox").is(":checked");
-            });
-            $("#select-all").prop(
-              "checked",
-              table.rows().nodes().to$().find("input.row-checkbox:checked")
-                .length === table.rows().count()
-            );
-          });
-        },
-      });
-
-      // Tùy chỉnh giao diện
-      $(tableRef.current)
-        .closest(".dataTables_wrapper")
-        .find("thead th")
-        .addClass(
-          "bg-gray-100 text-gray-500 text-xs font-semibold uppercase py-3 px-4 border-b border-gray-200"
-        );
-      $(tableRef.current)
-        .closest(".dataTables_wrapper")
-        .find("tbody tr")
-        .addClass("hover:bg-gray-50 border-b border-gray-200");
-      $(tableRef.current)
-        .closest(".dataTables_wrapper")
-        .find(".dataTables_paginate .paginate_button")
-        .addClass(
-          "px-2 py-1 text-gray-600 text-sm rounded-full transition-all"
-        );
-      $(tableRef.current)
-        .closest(".dataTables_wrapper")
-        .find(".dataTables_paginate .paginate_button.current")
-        .addClass("bg-pink-500 text-white");
-      $(tableRef.current)
-        .closest(".dataTables_wrapper")
-        .find(".dataTables_paginate .paginate_button:hover")
-        .addClass("bg-gray-100 text-pink-500");
-
-      return () => {
-        table.destroy();
-      };
+  // Open edit modal with server check
+  const openEditModal = async (customer) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/customers/${customer.id}`);
+      if (response.data) {
+        setFormData({
+          id: customer.id,
+          customerName: customer.customerName,
+          company: customer.company,
+          orderValue: customer.orderValue.replace("$", ""),
+          orderDate: formatDateToInput(customer.orderDate),
+          status: customer.status,
+        });
+        setModalIsOpen(true); // Open modal
+        setErrors({});
+      }
+    } catch (error) {
+      if (error.response?.status === 404) {
+        alert("Customer not found on the server. Refreshing list...");
+        const refreshedResponse = await axios.get("http://localhost:3001/customers");
+        setCustomers(refreshedResponse.data);
+      } else {
+        alert("Error checking customer existence.");
+      }
     }
-  }, [loading, data]);
+  };
+
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    validateField(name, value);
+  };
+
+  // Validate individual fields
+  const validateField = (name, value) => {
+    let newErrors = { ...errors };
+
+    switch (name) {
+      case "customerName":
+        if (!value.trim()) newErrors.customerName = "Customer name is required";
+        else delete newErrors.customerName;
+        break;
+      case "company":
+        if (!value.trim()) newErrors.company = "Company name is required";
+        else delete newErrors.company;
+        break;
+      case "orderValue":
+        if (!value || Number(value) <= 0)
+          newErrors.orderValue = "Order value must be greater than 0";
+        else delete newErrors.orderValue;
+        break;
+      case "orderDate":
+        if (!value) newErrors.orderDate = "Order date is required";
+        else delete newErrors.orderDate;
+        break;
+      case "status":
+        if (!value) newErrors.status = "Status is required";
+        else delete newErrors.status;
+        break;
+      default:
+        break;
+    }
+
+    setErrors(newErrors);
+  };
+
+  // Check if form is valid
+  const isFormValid = () => {
+    return (
+      formData.customerName.trim() &&
+      formData.company.trim() &&
+      formData.orderValue &&
+      Number(formData.orderValue) > 0 &&
+      formData.orderDate &&
+      formData.status &&
+      Object.keys(errors).length === 0
+    );
+  };
+
+  // Handle save action
+  const handleSave = async () => {
+    if (!isFormValid()) {
+      validateField("customerName", formData.customerName);
+      validateField("company", formData.company);
+      validateField("orderValue", formData.orderValue);
+      validateField("orderDate", formData.orderDate);
+      validateField("status", formData.status);
+      return;
+    }
+
+    setIsSaving(true);
+    const updatedCustomer = {
+      ...formData,
+      orderValue: `$${formData.orderValue}`,
+      orderDate: formatDateToDisplay(formData.orderDate),
+    };
+
+    try {
+      await axios.put(`http://localhost:3001/customers/${formData.id}`, updatedCustomer);
+      setCustomers((prev) =>
+        prev.map((cus) => (cus.id === formData.id ? updatedCustomer : cus))
+      );
+      alert("Customer updated successfully!");
+      closeModal();
+    } catch (error) {
+      let errorMessage = "Failed to update customer.";
+      if (error.response?.status === 404) {
+        errorMessage = "Customer not found on the server.";
+        const response = await axios.get("http://localhost:3001/customers");
+        setCustomers(response.data);
+      } else {
+        errorMessage = error.response?.data.message || error.message;
+      }
+      console.error("Update failed:", errorMessage);
+      alert(`Error: ${errorMessage}`);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Close modal
+  const closeModal = () => {
+    setModalIsOpen(false); // Close modal
+    setFormData({
+      id: "",
+      customerName: "",
+      company: "",
+      orderValue: "",
+      orderDate: "",
+      status: "",
+    });
+    setErrors({});
+  };
+
+  // Handle customer selection
+  const handleSelectCustomer = (id) => {
+    setSelectedCustomers((prev) =>
+      prev.includes(id) ? prev.filter((cid) => cid !== id) : [...prev, id]
+    );
+  };
+
+  // Handle select all
+  const handleSelectAll = () => {
+    setSelectedCustomers(
+      selectedCustomers.length === currentData.length
+        ? []
+        : currentData.map((customer) => customer.id)
+    );
+  };
+
+  // Optimize displayed data
+  const currentData = useMemo(
+    () =>
+      customers.slice(
+        (currentPage - 1) * rowsPerPage,
+        currentPage * rowsPerPage
+      ),
+    [customers, currentPage]
+  );
 
   if (loading) {
     return (
@@ -279,31 +233,238 @@ const ReportTable = () => {
   }
 
   return (
-    <div className="report">
+    <div className="bg-white rounded-xl p-4 mt-6 shadow-sm">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-          <img src={ReportIcon} alt="Report Icon" className="w-5 h-5 mr-2" />
-          <span className="text-pink-500">Detailed report</span>
-        </h3>
-        <div className="flex space-x-2">
-          <button className="px-3 py-1 border border-pink-500 text-pink-500 rounded-lg hover:bg-pink-500 hover:text-white transition-all flex items-center">
-            <img className="mr-1" src={ImportIcon} alt="ImportIcon" />
+        <h2 className="text-lg font-semibold flex items-center gap-2">
+          <img src="src/assets/img/ReportIcon.png" alt="icon" className="w-5 h-5" />
+          Detailed report
+        </h2>
+        <div className="flex gap-2">
+          <button className="flex items-center gap-2 border border-pink-500 text-pink-500 px-4 py-1.5 rounded-lg text-sm hover:bg-pink-50">
+            <img src="src/assets/img/Import.png" alt="icon" className="w-4 h-4" />
             Import
           </button>
-          <button className="px-3 py-1 border border-pink-500 text-pink-500 rounded-lg hover:bg-pink-500 hover:text-white transition-all flex items-center">
-            <img className="mr-1" src={ExportIcon} alt="ExportIcon" />
+          <button className="flex items-center gap-2 border border-pink-500 text-pink-500 px-4 py-1.5 rounded-lg text-sm hover:bg-pink-50">
+            <img src="src/assets/img/Export.png" alt="icon" className="w-4 h-4" />
             Export
           </button>
         </div>
       </div>
-      <div className="overflow-x-auto">
-        <table
-          ref={tableRef}
-          className="w-full border-collapse dataTable text-gray-700 text-sm"
-        ></table>
+
+      <div className="overflow-x-auto border">
+        <table className="min-w-full text-sm">
+          <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+            <tr>
+              <th className="p-3 text-left">
+                <input
+                  type="checkbox"
+                  checked={selectedCustomers.length === currentData.length}
+                  onChange={handleSelectAll}
+                />
+              </th>
+              <th className="p-3 text-left">Customer Name</th>
+              <th className="p-3 text-left">Company</th>
+              <th className="p-3 text-left">Order Value</th>
+              <th className="p-3 text-left">Order Date</th>
+              <th className="p-3 text-left">Status</th>
+              <th className="p-3 text-left"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentData.map((customer) => (
+              <tr key={customer.id} className="border-t hover:bg-gray-50">
+                <td className="p-3">
+                  <input
+                    type="checkbox"
+                    checked={selectedCustomers.includes(customer.id)}
+                    onChange={() => handleSelectCustomer(customer.id)}
+                  />
+                </td>
+                <td className="p-3 flex items-center gap-2 font-medium text-gray-800">
+                  <img
+                    src={customer.avatar}
+                    alt={customer.customerName}
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                  {customer.customerName}
+                </td>
+                <td className="p-3">{customer.company}</td>
+                <td className="p-3">{customer.orderValue}</td>
+                <td className="p-3">{customer.orderDate}</td>
+                <td className="p-3">
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      {
+                        New: "bg-blue-100 text-blue-500",
+                        "In-progress": "bg-yellow-100 text-yellow-600",
+                        Completed: "bg-green-100 text-green-500",
+                      }[customer.status]
+                    }`}
+                  >
+                    {customer.status}
+                  </span>
+                </td>
+                <td className="p-3">
+                  <img
+                    src="src/assets/img/Edit.png"
+                    alt="Edit"
+                    className="w-4 h-4 cursor-pointer"
+                    onClick={() => openEditModal(customer)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+
+      <Pagination
+        totalItems={customers.length}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        rowsPerPage={rowsPerPage}
+      />
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        className="bg-white p-8 rounded-xl shadow-2xl max-w-lg mx-auto mt-24 border border-gray-200"
+        overlayClassName="fixed inset-0 bg-black/60 flex justify-center items-center"
+      >
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+          <span className="mr-2">📝</span> Edit Order
+        </h2>
+        <form>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            {/* Customer Name */}
+            <div>
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
+                Customer Name
+              </label>
+              <input
+                type="text"
+                name="customerName"
+                value={formData.customerName}
+                onChange={handleInputChange}
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all ${
+                  errors.customerName ? "border-red-500" : "border-gray-300"
+                }`}
+                placeholder="Enter customer name"
+              />
+              {errors.customerName && (
+                <p className="text-red-500 text-xs mt-1">{errors.customerName}</p>
+              )}
+            </div>
+
+            {/* Company */}
+            <div>
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
+                Company
+              </label>
+              <input
+                type="text"
+                name="company"
+                value={formData.company}
+                onChange={handleInputChange}
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all ${
+                  errors.company ? "border-red-500" : "border-gray-300"
+                }`}
+                placeholder="Enter company name"
+              />
+              {errors.company && (
+                <p className="text-red-500 text-xs mt-1">{errors.company}</p>
+              )}
+            </div>
+
+            {/* Order Value */}
+            <div>
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
+                Order Value
+              </label>
+              <input
+                type="number"
+                name="orderValue"
+                value={formData.orderValue}
+                onChange={handleInputChange}
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all ${
+                  errors.orderValue ? "border-red-500" : "border-gray-300"
+                }`}
+                placeholder="Enter order value"
+              />
+              {errors.orderValue && (
+                <p className="text-red-500 text-xs mt-1">{errors.orderValue}</p>
+              )}
+            </div>
+
+            {/* Order Date */}
+            <div>
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
+                Order Date
+              </label>
+              <input
+                type="date"
+                name="orderDate"
+                value={formData.orderDate}
+                onChange={handleInputChange}
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all ${
+                  errors.orderDate ? "border-red-500" : "border-gray-300"
+                }`}
+              />
+              {errors.orderDate && (
+                <p className="text-red-500 text-xs mt-1">{errors.orderDate}</p>
+              )}
+            </div>
+
+            {/* Status */}
+            <div className="col-span-2">
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
+                Status
+              </label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleInputChange}
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all ${
+                  errors.status ? "border-red-500" : "border-gray-300"
+                }`}
+              >
+                <option value="">Select status</option>
+                <option value="New">New</option>
+                <option value="In-progress">In-progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+              {errors.status && (
+                <p className="text-red-500 text-xs mt-1">{errors.status}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex justify-end space-x-3">
+            <button
+              type="button"
+              onClick={closeModal}
+              className="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={!isFormValid() || isSaving}
+              className={`px-5 py-2 rounded-lg transition-all duration-200 font-medium ${
+                isFormValid() && !isSaving
+                  ? "bg-pink-500 text-white hover:bg-pink-600"
+                  : "bg-pink-300 text-gray-200 cursor-not-allowed"
+              }`}
+            >
+              {isSaving ? "Saving..." : "Save"}
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
-};
+});
 
-export default ReportTable;
+export default DataTable;

@@ -1,55 +1,73 @@
 {
-  "turnover": { "value": "$92,405", "change": "5.39%" },
-  "profit": { "value": "$32,218", "change": "5.39%" },
-  "newCustomer": { "value": "298", "change": "6.84%" },
-  "orders": [
+  "turnover": {
+    "value": "$92,405",
+    "change": "5.39%"
+  },
+  "profit": {
+    "value": "$32,218",
+    "change": "5.39%"
+  },
+  "newCustomer": {
+    "value": "298",
+    "change": "6.84%"
+  },
+  "customers": [
     {
-      "id": 2,
+      "id": "2",
       "customerName": "Carlos Garcia",
-      "avatar": "src/assets/img/avatar2.png",
       "company": "SmoozeShift",
-      "orderValue": "$747",
-      "orderDate": "24/07/2023",
-      "status": "New"
+      "orderValue": "$900",
+      "orderDate": "21/08/2025",
+      "status": "New",
+      "avatar": "src/assets/img/avatar3.png"
     },
     {
-      "id": 3,
+      "id": "3",
       "customerName": "Elizabeth Bailey",
-      "avatar": "src/assets/img/avatar3.png",
       "company": "Prime Time Telecom",
       "orderValue": "$564",
-      "orderDate": "08/08/2023",
-      "status": "In-progress"
+      "orderDate": "01/08/2023",
+      "status": "Completed",
+      "avatar": "src/assets/img/avatar3.png"
     },
     {
-      "id": 1,
+      "id": "1",
       "customerName": "Elizabeth Lee",
-      "avatar": "src/assets/img/avatar1.png",
       "company": "AvatarSystems",
       "orderValue": "$559",
       "orderDate": "10/07/2023",
-      "status": "New"
+      "status": "In-progress",
+      "avatar": "src/assets/img/avatar1.png"
     },
     {
-      "id": 4,
+      "id": "4",
       "customerName": "Ryan Brown",
-      "avatar": "src/assets/img/avatar4.png",
       "company": "OmniTech Corporation",
       "orderValue": "$841",
       "orderDate": "31/08/2023",
-      "status": "In-progress"
+      "status": "Completed",
+      "avatar": "src/assets/img/avatar4.png"
     },
     {
-      "id": 5,
+      "id": "5",
       "customerName": "Ryan Young",
-      "avatar": "src/assets/img/avatar5.png",
       "company": "DataStream Inc.",
       "orderValue": "$769",
       "orderDate": "01/05/2023",
-      "status": "Completed"
+      "status": "Completed",
+      "avatar": "src/assets/img/avatar5.png"
     },
     {
-      "id": 6,
+      "id": "6",
+      "customerName": "Hailey Adams",
+      "company": "FlowRush",
+      "orderValue": "$922",
+      "orderDate": "10/06/2023",
+      "status": "New",
+      "avatar": "src/assets/img/avatar6.png"
+    },
+    {
+      "id": "7",
       "customerName": "Hailey Adams",
       "avatar": "src/assets/img/avatar6.png",
       "company": "FlowRush",
@@ -58,7 +76,16 @@
       "status": "Completed"
     },
     {
-      "id": 7,
+      "id": "8",
+      "customerName": "Hailey Adams",
+      "company": "FlowRush",
+      "orderValue": "$922",
+      "orderDate": "10/06/2023",
+      "status": "In-progress",
+      "avatar": "src/assets/img/avatar6.png"
+    },
+    {
+      "id": "9",
       "customerName": "Hailey Adams",
       "avatar": "src/assets/img/avatar6.png",
       "company": "FlowRush",
@@ -67,7 +94,7 @@
       "status": "Completed"
     },
     {
-      "id": 8,
+      "id": "10",
       "customerName": "Hailey Adams",
       "avatar": "src/assets/img/avatar6.png",
       "company": "FlowRush",
@@ -76,22 +103,508 @@
       "status": "Completed"
     },
     {
-      "id": 9,
-      "customerName": "Hailey Adams",
-      "avatar": "src/assets/img/avatar6.png",
-      "company": "FlowRush",
-      "orderValue": "$922",
-      "orderDate": "10/06/2023",
+      "id": "11",
+      "customerName": "Michael Chen",
+      "avatar": "src/assets/img/avatar1.png",
+      "company": "TechTrend Innovations",
+      "orderValue": "$1234",
+      "orderDate": "15/09/2023",
+      "status": "New"
+    },
+    {
+      "id": "12",
+      "customerName": "Sarah Johnson",
+      "avatar": "src/assets/img/avatar2.png",
+      "company": "BrightFuture Solutions",
+      "orderValue": "$876",
+      "orderDate": "03/04/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "13",
+      "customerName": "David Kim",
+      "avatar": "src/assets/img/avatar3.png",
+      "company": "SkyNet Enterprises",
+      "orderValue": "$1450",
+      "orderDate": "22/11/2023",
       "status": "Completed"
     },
     {
-      "id": 10,
-      "customerName": "Hailey Adams",
+      "id": "14",
+      "customerName": "Emma Wilson",
+      "avatar": "src/assets/img/avatar4.png",
+      "company": "CoreWave Technologies",
+      "orderValue": "$632",
+      "orderDate": "17/03/2023",
+      "status": "New"
+    },
+    {
+      "id": "15",
+      "customerName": "James Patel",
+      "avatar": "src/assets/img/avatar5.png",
+      "company": "Quantum Dynamics",
+      "orderValue": "$998",
+      "orderDate": "29/08/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "16",
+      "customerName": "Olivia Nguyen",
       "avatar": "src/assets/img/avatar6.png",
-      "company": "FlowRush",
-      "orderValue": "$922",
-      "orderDate": "10/06/2023",
+      "company": "NexGen Solutions",
+      "orderValue": "$750",
+      "orderDate": "12/06/2023",
       "status": "Completed"
+    },
+    {
+      "id": "17",
+      "customerName": "Liam Martinez",
+      "avatar": "src/assets/img/avatar1.png",
+      "company": "BlueHorizon Inc.",
+      "orderValue": "$1100",
+      "orderDate": "05/10/2023",
+      "status": "New"
+    },
+    {
+      "id": "18",
+      "customerName": "Sophia Davis",
+      "avatar": "src/assets/img/avatar2.png",
+      "company": "Starlight Systems",
+      "orderValue": "$890",
+      "orderDate": "19/07/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "19",
+      "customerName": "Noah Thompson",
+      "avatar": "src/assets/img/avatar3.png",
+      "company": "EverGrow Technologies",
+      "orderValue": "$1345",
+      "orderDate": "25/12/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "20",
+      "customerName": "Isabella Lopez",
+      "avatar": "src/assets/img/avatar4.png",
+      "company": "PulseWave Corp.",
+      "orderValue": "$678",
+      "orderDate": "14/02/2023",
+      "status": "New"
+    },
+    {
+      "id": "21",
+      "customerName": "Ethan Walker",
+      "avatar": "src/assets/img/avatar5.png",
+      "company": "CloudSync Solutions",
+      "orderValue": "$1020",
+      "orderDate": "30/09/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "22",
+      "customerName": "Ava Rodriguez",
+      "avatar": "src/assets/img/avatar6.png",
+      "company": "SparkVibe Inc.",
+      "orderValue": "$950",
+      "orderDate": "08/05/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "23",
+      "customerName": "Mason Harris",
+      "avatar": "src/assets/img/avatar1.png",
+      "company": "NeoTech Ventures",
+      "orderValue": "$780",
+      "orderDate": "21/11/2023",
+      "status": "New"
+    },
+    {
+      "id": "24",
+      "customerName": "Mia Clark",
+      "avatar": "src/assets/img/avatar2.png",
+      "company": "Visionary Labs",
+      "orderValue": "$1125",
+      "orderDate": "04/04/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "25",
+      "customerName": "Lucas Lewis",
+      "avatar": "src/assets/img/avatar3.png",
+      "company": "FutureProof Systems",
+      "orderValue": "$870",
+      "orderDate": "16/08/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "26",
+      "customerName": "Charlotte Allen",
+      "avatar": "src/assets/img/avatar4.png",
+      "company": "InnovateX Corp.",
+      "orderValue": "$1360",
+      "orderDate": "27/06/2023",
+      "status": "New"
+    },
+    {
+      "id": "27",
+      "customerName": "Henry Young",
+      "avatar": "src/assets/img/avatar5.png",
+      "company": "TechFlow Enterprises",
+      "orderValue": "$645",
+      "orderDate": "09/10/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "28",
+      "customerName": "Amelia King",
+      "avatar": "src/assets/img/avatar6.png",
+      "company": "BrightPath Solutions",
+      "orderValue": "$980",
+      "orderDate": "02/03/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "29",
+      "customerName": "Alexander Scott",
+      "avatar": "src/assets/img/avatar1.png",
+      "company": "Skyward Technologies",
+      "orderValue": "$1230",
+      "orderDate": "18/12/2023",
+      "status": "New"
+    },
+    {
+      "id": "30",
+      "customerName": "Harper Green",
+      "avatar": "src/assets/img/avatar2.png",
+      "company": "WaveCrest Inc.",
+      "orderValue": "$710",
+      "orderDate": "11/07/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "31",
+      "customerName": "Benjamin Hill",
+      "avatar": "src/assets/img/avatar3.png",
+      "company": "NextWave Solutions",
+      "orderValue": "$1050",
+      "orderDate": "23/09/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "32",
+      "customerName": "Evelyn Adams",
+      "avatar": "src/assets/img/avatar4.png",
+      "company": "QuantumLeap Corp.",
+      "orderValue": "$820",
+      "orderDate": "06/05/2023",
+      "status": "New"
+    },
+    {
+      "id": "33",
+      "customerName": "Daniel Baker",
+      "avatar": "src/assets/img/avatar5.png",
+      "company": "StarCore Technologies",
+      "orderValue": "$1150",
+      "orderDate": "14/11/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "34",
+      "customerName": "Aria Carter",
+      "avatar": "src/assets/img/avatar6.png",
+      "company": "BlueSpark Ventures",
+      "orderValue": "$690",
+      "orderDate": "28/02/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "35",
+      "customerName": "Jack Turner",
+      "avatar": "src/assets/img/avatar1.png",
+      "company": "EverStream Inc.",
+      "orderValue": "$1275",
+      "orderDate": "20/08/2023",
+      "status": "New"
+    },
+    {
+      "id": "36",
+      "customerName": "Lily Phillips",
+      "avatar": "src/assets/img/avatar2.png",
+      "company": "TechTrend Solutions",
+      "orderValue": "$940",
+      "orderDate": "01/06/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "37",
+      "customerName": "Owen Mitchell",
+      "avatar": "src/assets/img/avatar3.png",
+      "company": "BrightCore Enterprises",
+      "orderValue": "$1080",
+      "orderDate": "12/10/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "38",
+      "customerName": "Grace Evans",
+      "avatar": "src/assets/img/avatar4.png",
+      "company": "SkyPulse Technologies",
+      "orderValue": "$760",
+      "orderDate": "25/04/2023",
+      "status": "New"
+    },
+    {
+      "id": "39",
+      "customerName": "Samuel Morris",
+      "avatar": "src/assets/img/avatar5.png",
+      "company": "NovaTech Corp.",
+      "orderValue": "$1320",
+      "orderDate": "07/12/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "40",
+      "customerName": "Chloe Parker",
+      "avatar": "src/assets/img/avatar6.png",
+      "company": "FutureWave Systems",
+      "orderValue": "$880",
+      "orderDate": "19/07/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "41",
+      "customerName": "Logan Wright",
+      "avatar": "src/assets/img/avatar1.png",
+      "company": "StarPath Solutions",
+      "orderValue": "$1190",
+      "orderDate": "03/09/2023",
+      "status": "New"
+    },
+    {
+      "id": "42",
+      "customerName": "Zoe Edwards",
+      "avatar": "src/assets/img/avatar2.png",
+      "company": "CloudPeak Technologies",
+      "orderValue": "$670",
+      "orderDate": "15/03/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "43",
+      "customerName": "Nathan Reed",
+      "avatar": "src/assets/img/avatar3.png",
+      "company": "TechStream Inc.",
+      "orderValue": "$1245",
+      "orderDate": "26/11/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "44",
+      "customerName": "Hannah Foster",
+      "avatar": "src/assets/img/avatar4.png",
+      "company": "BrightWave Corp.",
+      "orderValue": "$830",
+      "orderDate": "08/06/2023",
+      "status": "New"
+    },
+    {
+      "id": "45",
+      "customerName": "Elijah Perry",
+      "avatar": "src/assets/img/avatar5.png",
+      "company": "SkyCore Solutions",
+      "orderValue": "$1060",
+      "orderDate": "21/10/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "46",
+      "customerName": "Abigail Hayes",
+      "avatar": "src/assets/img/avatar6.png",
+      "company": "NextGen Enterprises",
+      "orderValue": "$790",
+      "orderDate": "04/05/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "47",
+      "customerName": "Caleb Brooks",
+      "avatar": "src/assets/img/avatar1.png",
+      "company": "FutureCore Technologies",
+      "orderValue": "$1175",
+      "orderDate": "16/09/2023",
+      "status": "New"
+    },
+    {
+      "id": "48",
+      "customerName": "Sofia Rivera",
+      "avatar": "src/assets/img/avatar2.png",
+      "company": "StarWave Inc.",
+      "orderValue": "$910",
+      "orderDate": "29/07/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "49",
+      "customerName": "Gabriel Fisher",
+      "avatar": "src/assets/img/avatar3.png",
+      "company": "TechPulse Solutions",
+      "orderValue": "$1280",
+      "orderDate": "11/12/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "50",
+      "customerName": "Aubrey Cox",
+      "avatar": "src/assets/img/avatar4.png",
+      "company": "BrightStream Corp.",
+      "orderValue": "$720",
+      "orderDate": "23/02/2023",
+      "status": "New"
+    },
+    {
+      "id": "51",
+      "customerName": "Julian Ward",
+      "avatar": "src/assets/img/avatar5.png",
+      "company": "CloudWave Technologies",
+      "orderValue": "$1135",
+      "orderDate": "06/08/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "52",
+      "customerName": "Layla Stone",
+      "avatar": "src/assets/img/avatar6.png",
+      "company": "SkyTrend Solutions",
+      "orderValue": "$860",
+      "orderDate": "18/06/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "53",
+      "customerName": "Dylan Price",
+      "avatar": "src/assets/img/avatar1.png",
+      "company": "FutureStream Inc.",
+      "orderValue": "$1210",
+      "orderDate": "30/10/2023",
+      "status": "New"
+    },
+    {
+      "id": "54",
+      "customerName": "Kayla Murphy",
+      "avatar": "src/assets/img/avatar2.png",
+      "company": "StarCore Enterprises",
+      "orderValue": "$770",
+      "orderDate": "12/04/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "55",
+      "customerName": "Brandon Fox",
+      "avatar": "src/assets/img/avatar3.png",
+      "company": "TechWave Corp.",
+      "orderValue": "$1295",
+      "orderDate": "24/09/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "56",
+      "customerName": "Sydney Graham",
+      "avatar": "src/assets/img/avatar4.png",
+      "company": "BrightPath Technologies",
+      "orderValue": "$850",
+      "orderDate": "07/07/2023",
+      "status": "New"
+    },
+    {
+      "id": "57",
+      "customerName": "Carter Bell",
+      "avatar": "src/assets/img/avatar5.png",
+      "company": "SkyStream Solutions",
+      "orderValue": "$1140",
+      "orderDate": "19/11/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "58",
+      "customerName": "Madeline Hunt",
+      "avatar": "src/assets/img/avatar6.png",
+      "company": "FuturePulse Corp.",
+      "orderValue": "$680",
+      "orderDate": "01/03/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "59",
+      "customerName": "Wyatt Long",
+      "avatar": "src/assets/img/avatar1.png",
+      "company": "TechCore Ventures",
+      "orderValue": "$1260",
+      "orderDate": "13/08/2023",
+      "status": "New"
+    },
+    {
+      "id": "60",
+      "customerName": "Ellie Ward",
+      "avatar": "src/assets/img/avatar2.png",
+      "company": "BrightTrend Inc.",
+      "orderValue": "$920",
+      "orderDate": "25/05/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "61",
+      "customerName": "Josiah Cole",
+      "avatar": "src/assets/img/avatar3.png",
+      "company": "SkyWave Technologies",
+      "orderValue": "$1090",
+      "orderDate": "06/10/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "62",
+      "customerName": "Avery Barnes",
+      "avatar": "src/assets/img/avatar4.png",
+      "company": "FuturePath Solutions",
+      "orderValue": "$740",
+      "orderDate": "18/04/2023",
+      "status": "New"
+    },
+    {
+      "id": "63",
+      "customerName": "Leah Fox",
+      "avatar": "src/assets/img/avatar5.png",
+      "company": "StarTrend Corp.",
+      "orderValue": "$1180",
+      "orderDate": "30/09/2023",
+      "status": "In-progress"
+    },
+    {
+      "id": "64",
+      "customerName": "Eli Russell",
+      "avatar": "src/assets/img/avatar6.png",
+      "company": "TechStream Enterprises",
+      "orderValue": "$960",
+      "orderDate": "11/07/2023",
+      "status": "Completed"
+    },
+    {
+      "id": "65",
+      "customerName": "Clara Dunn",
+      "avatar": "src/assets/img/avatar1.png",
+      "company": "BrightCore Solutions",
+      "orderValue": "$1255",
+      "orderDate": "23/11/2023",
+      "status": "New"
+    },
+    {
+      "id": "66",
+      "customerName": "Hudson Wells",
+      "avatar": "src/assets/img/avatar2.png",
+      "company": "SkyPath Inc.",
+      "orderValue": "$870",
+      "orderDate": "05/06/2023",
+      "status": "In-progress"
     }
   ]
 }
