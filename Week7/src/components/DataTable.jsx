@@ -3,13 +3,14 @@ import React, { useEffect, useState, useMemo, memo } from "react";
 import axios from "axios";
 import Pagination from "./Pagination";
 import CustomerModal from "./CustomerModal";
+import ImportButton from "./ImportButton";
+import ExportButton from "./ExportButton";
 
-// Use React.memo to prevent unnecessary re-renders
 const DataTable = memo(() => {
   const [customers, setCustomers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [editUser, setEditUser] = useState(null); // null: không có modal, object: edit, "new": add new
+  const [editUser, setEditUser] = useState(null);
   const [selectedCustomers, setSelectedCustomers] = useState([]);
   const [formData, setFormData] = useState({
     customerName: "",
@@ -64,7 +65,7 @@ const DataTable = memo(() => {
       orderValue: customer.orderValue.replace("$", ""),
       orderDate: formatDateToInput(customer.orderDate),
       status: customer.status,
-      avatar: customer.avatar, // Bao gồm avatar khi edit
+      avatar: customer.avatar,
     });
     setEditUser(customer);
     setErrors({});
@@ -78,7 +79,7 @@ const DataTable = memo(() => {
       orderValue: "",
       orderDate: "",
       status: "",
-      avatar: "", // Khởi tạo avatar rỗng
+      avatar: "",
     });
     setEditUser("new");
     setErrors({});
@@ -90,24 +91,16 @@ const DataTable = memo(() => {
       ...data,
       orderValue: `$${data.orderValue}`,
       orderDate: formatDateToDisplay(data.orderDate),
-      avatar: data.avatar || "src/assets/img/avatar313.png", // Giá trị mặc định nếu không có avatar
+      avatar: data.avatar || "src/assets/img/avatar313.png",
     };
 
     try {
       if (editUser === "new") {
-        // Add new customer
-        const response = await axios.post(
-          "http://localhost:3001/customers",
-          updatedCustomer
-        );
-        setCustomers((prev) => [...prev, response.data]); // Thêm customer mới vào danh sách
+        const response = await axios.post("http://localhost:3001/customers", updatedCustomer);
+        setCustomers((prev) => [...prev, response.data]);
         alert("Customer added successfully!");
       } else {
-        // Edit existing customer
-        await axios.put(
-          `http://localhost:3001/customers/${editUser.id}`,
-          updatedCustomer
-        );
+        await axios.put(`http://localhost:3001/customers/${editUser.id}`, updatedCustomer);
         setCustomers((prev) =>
           prev.map((cus) => (cus.id === editUser.id ? updatedCustomer : cus))
         );
@@ -118,13 +111,66 @@ const DataTable = memo(() => {
       let errorMessage = "Failed to save customer.";
       if (error.response?.status === 404) {
         errorMessage = "Customer not found on the server.";
-        await fetchCustomers(); // Reload dữ liệu nếu không tìm thấy
+        await fetchCustomers();
       } else {
         errorMessage = error.response?.data.message || error.message;
       }
       console.error("Save failed:", errorMessage);
       alert(`Error: ${errorMessage}`);
     }
+  };
+
+  // Handle delete action
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this customer?")) return;
+
+    try {
+      await axios.delete(`http://localhost:3001/customers/${id}`);
+      setCustomers((prev) => prev.filter((cus) => cus.id !== id));
+      setSelectedCustomers((prev) => prev.filter((cid) => cid !== id));
+      alert("Customer deleted successfully!");
+    } catch (error) {
+      console.error("Delete failed:", error.message);
+      alert(`Error: ${error.response?.data.message || error.message}`);
+    }
+  };
+
+  // Handle delete selected customers
+  const handleDeleteSelected = async () => {
+    if (selectedCustomers.length === 0) {
+      alert("Please select at least one customer to delete.");
+      return;
+    }
+
+    if (!window.confirm(`Are you sure you want to delete ${selectedCustomers.length} customer(s)?`)) return;
+
+    try {
+      await Promise.all(
+        selectedCustomers.map((id) => axios.delete(`http://localhost:3001/customers/${id}`))
+      );
+      setCustomers((prev) => prev.filter((cus) => !selectedCustomers.includes(cus.id)));
+      setSelectedCustomers([]);
+      alert("Selected customers deleted successfully!");
+    } catch (error) {
+      console.error("Delete selected failed:", error.message);
+      alert(`Error: ${error.response?.data.message || error.message}`);
+    }
+  };
+
+  // Handle import success callback
+  const handleImportSuccess = (updatedCustomers) => {
+    setCustomers((prev) => {
+      const newCustomers = [...prev];
+      updatedCustomers.forEach((updated) => {
+        const index = newCustomers.findIndex((cus) => cus.id === updated.id);
+        if (index !== -1) {
+          newCustomers[index] = updated; // Cập nhật nếu đã tồn tại
+        } else {
+          newCustomers.push(updated); // Thêm mới nếu chưa có
+        }
+      });
+      return newCustomers;
+    });
   };
 
   // Close modal
@@ -178,14 +224,10 @@ const DataTable = memo(() => {
   }
 
   return (
-    <div className="bg-white rounded-xl p-4 mt-6 shadow-sm">
+    <div className="bg-white rounded-xl p-4 mt-6 shadow-md">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold flex items-center gap-2">
-          <img
-            src="src/assets/img/ReportIcon.png"
-            alt="icon"
-            className="w-5 h-5"
-          />
+          <img src="src/assets/img/ReportIcon.png" alt="icon" className="w-5 h-5" />
           Detailed report
         </h2>
         <div className="flex gap-4 items-center">
@@ -193,29 +235,19 @@ const DataTable = memo(() => {
             onClick={openAddNewModal}
             className="flex items-center gap-2 border border-pink-500 text-pink-500 px-4 py-1.5 rounded-lg text-sm hover:bg-pink-400 hover:text-white cursor-pointer"
           >
-            <img
-              src="src/assets/img/ReportIcon.png"
-              alt="icon"
-              className="w-4 h-4"
-            />
+            <img src="src/assets/img/ReportIcon.png" alt="icon" className="w-4 h-4" />
             Add new user
           </button>
           <div className="flex gap-2">
-            <button className="flex items-center gap-2 border border-pink-500 text-pink-500 px-4 py-1.5 rounded-lg text-sm hover:bg-pink-50">
-              <img
-                src="src/assets/img/Import.png"
-                alt="icon"
-                className="w-4 h-4"
-              />
-              Import
-            </button>
-            <button className="flex items-center gap-2 border border-pink-500 text-pink-500 px-4 py-1.5 rounded-lg text-sm hover:bg-pink-50">
-              <img
-                src="src/assets/img/Export.png"
-                alt="icon"
-                className="w-4 h-4"
-              />
-              Export
+            <ImportButton onImportSuccess={handleImportSuccess} />
+            <ExportButton customers={customers} />
+            <button
+              onClick={handleDeleteSelected}
+              className="flex items-center gap-2 border border-red-500 text-red-500 px-4 py-1.5 rounded-lg text-sm hover:bg-red-500 hover:text-white cursor-pointer"
+              disabled={selectedCustomers.length === 0}
+            >
+              <img src="src/assets/img/Delete.png" alt="delete icon" className="w-4 h-4" />
+              Delete Selected
             </button>
           </div>
         </div>
@@ -237,7 +269,7 @@ const DataTable = memo(() => {
               <th className="p-3 text-left">Order Value</th>
               <th className="p-3 text-left">Order Date</th>
               <th className="p-3 text-left">Status</th>
-              <th className="p-3 text-left"></th>
+              <th className="p-3 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -281,16 +313,18 @@ const DataTable = memo(() => {
                     {customer.status}
                   </span>
                 </td>
-                <td className="p-3">
+                <td className="p-3 flex gap-2">
                   <button
                     onClick={() => openEditModal(customer)}
                     className="p-2 bg-gray-200 text-white rounded-lg border-gray-800 hover:bg-pink-400 transition-all"
                   >
-                    <img
-                      src="src/assets/img/Edit.png"
-                      alt="Edit"
-                      className="w-4 h-4"
-                    />
+                    <img src="src/assets/img/Edit.png" alt="Edit" className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(customer.id)}
+                    className="p-2 bg-gray-200 text-white rounded-lg border-gray-800 hover:bg-red-500 transition-all"
+                  >
+                    <img src="src/assets/img/Delete.png" alt="Delete" className="w-4 h-4" />
                   </button>
                 </td>
               </tr>

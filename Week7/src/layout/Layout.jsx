@@ -1,3 +1,4 @@
+// src/components/Layout.jsx
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
@@ -10,12 +11,14 @@ const Layout = () => {
       <Sidebar />
 
       {/* Nội dung chính */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col ml-64"> {/* ml-64 để tránh che Sidebar */}
         {/* Header cố định */}
-        <Header />
+        <div className="fixed top-0 left-64 right-0 z-10 bg-white">
+          <Header />
+        </div>
 
         {/* Khu vực render các trang con */}
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 mt-16"> {/* mt-16 để tránh bị che bởi Header */}
           <Outlet />
         </main>
       </div>

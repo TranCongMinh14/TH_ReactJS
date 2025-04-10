@@ -13,33 +13,6 @@
   },
   "customers": [
     {
-      "id": "2",
-      "customerName": "Carlos Garcia",
-      "company": "SmoozeShift",
-      "orderValue": "$900",
-      "orderDate": "21/08/2025",
-      "status": "In-progress",
-      "avatar": "src/assets/img/avatar3.png"
-    },
-    {
-      "id": "3",
-      "customerName": "Elizabeth Bailey",
-      "company": "Prime Time Telecom",
-      "orderValue": "$564",
-      "orderDate": "01/08/2023",
-      "status": "Completed",
-      "avatar": "src/assets/img/avatar3.png"
-    },
-    {
-      "id": "1",
-      "customerName": "Elizabeth Lee",
-      "company": "AvatarSystems",
-      "orderValue": "$559",
-      "orderDate": "10/07/2023",
-      "status": "In-progress",
-      "avatar": "src/assets/img/avatar1.png"
-    },
-    {
       "id": "4",
       "customerName": "Ryan Brown",
       "company": "OmniTech Corporation",
@@ -56,15 +29,6 @@
       "orderDate": "01/05/2023",
       "status": "Completed",
       "avatar": "src/assets/img/avatar5.png"
-    },
-    {
-      "id": "6",
-      "customerName": "Hailey Adams",
-      "company": "FlowRush",
-      "orderValue": "$922",
-      "orderDate": "10/06/2023",
-      "status": "New",
-      "avatar": "src/assets/img/avatar6.png"
     },
     {
       "id": "7",
@@ -263,15 +227,6 @@
       "orderValue": "$980",
       "orderDate": "02/03/2023",
       "status": "Completed"
-    },
-    {
-      "id": "29",
-      "customerName": "Alexander Scott",
-      "avatar": "src/assets/img/avatar1.png",
-      "company": "Skyward Technologies",
-      "orderValue": "$1230",
-      "orderDate": "18/12/2023",
-      "status": "New"
     },
     {
       "id": "30",
@@ -598,15 +553,6 @@
       "status": "New"
     },
     {
-      "id": "66",
-      "customerName": "Hudson Wells",
-      "avatar": "src/assets/img/avatar2.png",
-      "company": "SkyPath Inc.",
-      "orderValue": "$870",
-      "orderDate": "05/06/2023",
-      "status": "In-progress"
-    },
-    {
       "id": "beb3",
       "customerName": "Tran Cong Minh",
       "company": "IUH .Inc",
@@ -614,7 +560,15 @@
       "orderDate": "10/04/2025",
       "status": "New",
       "avatar": "src/assets/img/avatar2.png"
+    },
+    {
+      "id": "d4bc",
+      "customerName": "Ryan Young",
+      "company": "DataStream Inc.",
+      "orderValue": "$345",
+      "orderDate": "10/04/2025",
+      "status": "In-progress",
+      "avatar": "src/assets/img/avatar6.png"
     }
-    
   ]
 }

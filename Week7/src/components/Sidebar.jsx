@@ -12,7 +12,7 @@ import Banner from "../assets/img/Banner.png";
 
 const Sidebar = () => {
   return (
-    <aside className="w-64 bg-white shadow-md flex flex-col justify-between">
+    <aside className="fixed top-0 left-0 w-64 h-full bg-white shadow-md flex flex-col justify-between z-20">
       {/* Logo và Menu */}
       <div>
         <h2 className="p-4 text-xl font-bold text-gray-800 flex items-center">
