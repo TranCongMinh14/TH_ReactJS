@@ -69,6 +69,13 @@ function App() {
     return matchesName && matchesCategory;
   });
 
+  // Tính tổng số sản phẩm và tổng tồn kho
+  const totalProducts = filteredProducts.length;
+  const totalStock = filteredProducts.reduce(
+    (sum, product) => sum + product.stock,
+    0
+  );
+
   return (
     <div className="container">
       <h1 className="title">Quản lý sản phẩm</h1>
@@ -110,6 +117,11 @@ function App() {
           ))}
         </tbody>
       </table>
+
+      {/* Hiển thị tổng số sản phẩm và tổng tồn kho */}
+      <div className="summary">
+        Tổng sản phẩm: {totalProducts} | Tổng tồn kho: {totalStock}
+      </div>
     </div>
   );
 }

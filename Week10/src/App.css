@@ -109,3 +109,10 @@
   border-radius: 3px;
   font-size: 16px;
 }
+
+.summary {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: right;
+}
