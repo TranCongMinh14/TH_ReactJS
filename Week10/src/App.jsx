@@ -38,6 +38,10 @@ function App() {
     }
   };
 
+  const deleteProduct = (id) => {
+    setProducts(products.filter((product) => product.id !== id));
+  };
+
   return (
     <div className="container">
       <h1 className="title">Quản lý sản phẩm</h1>
@@ -62,7 +66,11 @@ function App() {
         </thead>
         <tbody>
           {products.map((product) => (
-            <ProductItem key={product.id} product={product} />
+            <ProductItem
+              key={product.id}
+              product={product}
+              onDelete={deleteProduct}
+            />
           ))}
         </tbody>
       </table>
