@@ -1,24 +1,38 @@
-import { useState } from 'react';
-import ProductItem from './components/ProductItem';
-import AddProductForm from './components/AddProductForm';
-import SearchProduct from './components/SearchProduct';
-import './App.css';
+import { useState } from "react";
+import ProductItem from "./components/ProductItem";
+import AddProductForm from "./components/AddProductForm";
+import SearchProduct from "./components/SearchProduct";
+import FilterCategory from "./components/FilterCategory";
+import "./App.css";
 
 function App() {
   const [products, setProducts] = useState([
-    { id: 1, name: 'Áo thun', price: 150000, category: 'Thời trang', stock: 50 },
-    { id: 2, name: 'Laptop', price: 15000000, category: 'Công nghệ', stock: 10 },
-    { id: 3, name: 'Máy giặt', price: 7000000, category: 'Gia dụng', stock: 5 },
+    {
+      id: 1,
+      name: "Áo thun",
+      price: 150000,
+      category: "Thời trang",
+      stock: 50,
+    },
+    {
+      id: 2,
+      name: "Laptop",
+      price: 15000000,
+      category: "Công nghệ",
+      stock: 10,
+    },
+    { id: 3, name: "Máy giặt", price: 7000000, category: "Gia dụng", stock: 5 },
   ]);
 
   const [newProduct, setNewProduct] = useState({
-    name: '',
-    price: '',
-    category: 'Thời trang',
-    stock: '',
+    name: "",
+    price: "",
+    category: "Thời trang",
+    stock: "",
   });
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Tất cả");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -35,9 +49,9 @@ function App() {
         stock: parseInt(newProduct.stock),
       };
       setProducts([...products, product]);
-      setNewProduct({ name: '', price: '', category: 'Thời trang', stock: '' });
+      setNewProduct({ name: "", price: "", category: "Thời trang", stock: "" });
     } else {
-      alert('Vui lòng điền đầy đủ thông tin sản phẩm!');
+      alert("Vui lòng điền đầy đủ thông tin sản phẩm!");
     }
   };
 
@@ -45,17 +59,28 @@ function App() {
     setProducts(products.filter((product) => product.id !== id));
   };
 
-  // Lọc sản phẩm theo tên, không phân biệt hoa thường
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Lọc sản phẩm theo tên và danh mục
+  const filteredProducts = products.filter((product) => {
+    const matchesName = product.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "Tất cả" || product.category === selectedCategory;
+    return matchesName && matchesCategory;
+  });
 
   return (
     <div className="container">
       <h1 className="title">Quản lý sản phẩm</h1>
 
-      {/* Sử dụng SearchProduct component */}
-      <SearchProduct searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      {/* Sử dụng SearchProduct và FilterCategory components */}
+      <div className="filter-search-container">
+        <SearchProduct searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <FilterCategory
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+      </div>
 
       {/* Sử dụng AddProductForm component */}
       <AddProductForm

@@ -91,3 +91,21 @@
   border-radius: 3px;
   font-size: 16px;
 }
+
+.filter-search-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-container {
+  flex: 1;
+}
+
+.filter-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 16px;
+}
