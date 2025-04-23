@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ProductItem from './components/ProductItem';
 import AddProductForm from './components/AddProductForm';
+import SearchProduct from './components/SearchProduct';
 import './App.css';
 
 function App() {
@@ -16,6 +17,8 @@ function App() {
     category: 'Thời trang',
     stock: '',
   });
+
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -42,9 +45,17 @@ function App() {
     setProducts(products.filter((product) => product.id !== id));
   };
 
+  // Lọc sản phẩm theo tên, không phân biệt hoa thường
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="container">
       <h1 className="title">Quản lý sản phẩm</h1>
+
+      {/* Sử dụng SearchProduct component */}
+      <SearchProduct searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
       {/* Sử dụng AddProductForm component */}
       <AddProductForm
@@ -65,7 +76,7 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <ProductItem
               key={product.id}
               product={product}
