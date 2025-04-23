@@ -1,54 +1,31 @@
-import { useState, useEffect } from "react";
-import ProductItem from "./components/ProductItem";
-import AddProductForm from "./components/AddProductForm";
-import SearchProduct from "./components/SearchProduct";
-import FilterCategory from "./components/FilterCategory";
-import "./App.css";
+import { useState, useEffect } from 'react';
+import ProductItem from './components/ProductItem';
+import AddProductForm from './components/AddProductForm';
+import SearchProduct from './components/SearchProduct';
+import FilterCategory from './components/FilterCategory';
 
 function App() {
-  // Khởi tạo state từ localStorage (nếu có)
   const [products, setProducts] = useState(() => {
-    const savedProducts = localStorage.getItem("products");
-    return savedProducts
-      ? JSON.parse(savedProducts)
-      : [
-          {
-            id: 1,
-            name: "Áo thun",
-            price: 150000,
-            category: "Thời trang",
-            stock: 50,
-          },
-          {
-            id: 2,
-            name: "Laptop",
-            price: 15000000,
-            category: "Công nghệ",
-            stock: 10,
-          },
-          {
-            id: 3,
-            name: "Máy giặt",
-            price: 7000000,
-            category: "Gia dụng",
-            stock: 5,
-          },
-        ];
+    const savedProducts = localStorage.getItem('products');
+    return savedProducts ? JSON.parse(savedProducts) : [
+      { id: 1, name: 'Áo thun', price: 150000, category: 'Thời trang', stock: 50 },
+      { id: 2, name: 'Laptop', price: 15000000, category: 'Công nghệ', stock: 10 },
+      { id: 3, name: 'Máy giặt', price: 7000000, category: 'Gia dụng', stock: 5 },
+    ];
   });
 
   const [newProduct, setNewProduct] = useState({
-    name: "",
-    price: "",
-    category: "Thời trang",
-    stock: "",
+    name: '',
+    price: '',
+    category: 'Thời trang',
+    stock: '',
   });
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Tất cả");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Tất cả');
 
-  // Lưu danh sách sản phẩm vào localStorage mỗi khi products thay đổi
   useEffect(() => {
-    localStorage.setItem("products", JSON.stringify(products));
+    localStorage.setItem('products', JSON.stringify(products));
   }, [products]);
 
   const handleInputChange = (e) => {
@@ -66,9 +43,9 @@ function App() {
         stock: parseInt(newProduct.stock),
       };
       setProducts([...products, product]);
-      setNewProduct({ name: "", price: "", category: "Thời trang", stock: "" });
+      setNewProduct({ name: '', price: '', category: 'Thời trang', stock: '' });
     } else {
-      alert("Vui lòng điền đầy đủ thông tin sản phẩm!");
+      alert('Vui lòng điền đầy đủ thông tin sản phẩm!');
     }
   };
 
@@ -76,29 +53,33 @@ function App() {
     setProducts(products.filter((product) => product.id !== id));
   };
 
-  // Lọc sản phẩm theo tên và danh mục
+  const editProduct = (product) => {
+    setNewProduct({
+      name: product.name,
+      price: product.price,
+      category: product.category,
+      stock: product.stock,
+    });
+    deleteProduct(product.id);
+  };
+
   const filteredProducts = products.filter((product) => {
-    const matchesName = product.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
+    const matchesName = product.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory =
-      selectedCategory === "Tất cả" || product.category === selectedCategory;
+      selectedCategory === 'Tất cả' || product.category === selectedCategory;
     return matchesName && matchesCategory;
   });
 
-  // Tính tổng số sản phẩm và tổng tồn kho
   const totalProducts = filteredProducts.length;
-  const totalStock = filteredProducts.reduce(
-    (sum, product) => sum + product.stock,
-    0
-  );
+  const totalStock = filteredProducts.reduce((sum, product) => sum + product.stock, 0);
 
   return (
-    <div className="container">
-      <h1 className="title">Quản lý sản phẩm</h1>
+    <div className="max-w-4xl mx-auto p-5">
+      <h1 className="text-center text-2xl mb-5">
+        Quản lý sản phẩm
+      </h1>
 
-      {/* Sử dụng SearchProduct và FilterCategory components */}
-      <div className="filter-search-container">
+      <div className="flex gap-2.5 mb-5">
         <SearchProduct searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <FilterCategory
           selectedCategory={selectedCategory}
@@ -106,22 +87,20 @@ function App() {
         />
       </div>
 
-      {/* Sử dụng AddProductForm component */}
       <AddProductForm
         newProduct={newProduct}
         handleInputChange={handleInputChange}
         addProduct={addProduct}
       />
 
-      {/* Danh sách sản phẩm */}
-      <table className="product-table">
+      <table className="w-full border-collapse">
         <thead>
           <tr>
-            <th>Tên sản phẩm</th>
-            <th>Giá</th>
-            <th>Danh mục</th>
-            <th>Tồn kho</th>
-            <th>Hành động</th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-200">Tên sản phẩm</th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-200">Giá</th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-200">Danh mục</th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-200">Tồn kho</th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-200">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -130,13 +109,13 @@ function App() {
               key={product.id}
               product={product}
               onDelete={deleteProduct}
+              onEdit={editProduct}
             />
           ))}
         </tbody>
       </table>
 
-      {/* Hiển thị tổng số sản phẩm và tổng tồn kho */}
-      <div className="summary">
+      <div className="mt-2.5 text-right text-base font-bold">
         Tổng sản phẩm: {totalProducts} | Tổng tồn kho: {totalStock}
       </div>
     </div>
