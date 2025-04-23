@@ -1,38 +1,35 @@
-import { useState } from "react";
-import ProductItem from "./components/ProductItem";
-import AddProductForm from "./components/AddProductForm";
-import SearchProduct from "./components/SearchProduct";
-import FilterCategory from "./components/FilterCategory";
-import "./App.css";
+import { useState, useEffect } from 'react';
+import ProductItem from './components/ProductItem';
+import AddProductForm from './components/AddProductForm';
+import SearchProduct from './components/SearchProduct';
+import FilterCategory from './components/FilterCategory';
+import './App.css';
 
 function App() {
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Áo thun",
-      price: 150000,
-      category: "Thời trang",
-      stock: 50,
-    },
-    {
-      id: 2,
-      name: "Laptop",
-      price: 15000000,
-      category: "Công nghệ",
-      stock: 10,
-    },
-    { id: 3, name: "Máy giặt", price: 7000000, category: "Gia dụng", stock: 5 },
-  ]);
-
-  const [newProduct, setNewProduct] = useState({
-    name: "",
-    price: "",
-    category: "Thời trang",
-    stock: "",
+  // Khởi tạo state từ localStorage (nếu có)
+  const [products, setProducts] = useState(() => {
+    const savedProducts = localStorage.getItem('products');
+    return savedProducts ? JSON.parse(savedProducts) : [
+      { id: 1, name: 'Áo thun', price: 150000, category: 'Thời trang', stock: 50 },
+      { id: 2, name: 'Laptop', price: 15000000, category: 'Công nghệ', stock: 10 },
+      { id: 3, name: 'Máy giặt', price: 7000000, category: 'Gia dụng', stock: 5 },
+    ];
   });
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Tất cả");
+  const [newProduct, setNewProduct] = useState({
+    name: '',
+    price: '',
+    category: 'Thời trang',
+    stock: '',
+  });
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Tất cả');
+
+  // Lưu danh sách sản phẩm vào localStorage mỗi khi products thay đổi
+  useEffect(() => {
+    localStorage.setItem('products', JSON.stringify(products));
+  }, [products]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -49,9 +46,9 @@ function App() {
         stock: parseInt(newProduct.stock),
       };
       setProducts([...products, product]);
-      setNewProduct({ name: "", price: "", category: "Thời trang", stock: "" });
+      setNewProduct({ name: '', price: '', category: 'Thời trang', stock: '' });
     } else {
-      alert("Vui lòng điền đầy đủ thông tin sản phẩm!");
+      alert('Vui lòng điền đầy đủ thông tin sản phẩm!');
     }
   };
 
@@ -61,20 +58,15 @@ function App() {
 
   // Lọc sản phẩm theo tên và danh mục
   const filteredProducts = products.filter((product) => {
-    const matchesName = product.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
+    const matchesName = product.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory =
-      selectedCategory === "Tất cả" || product.category === selectedCategory;
+      selectedCategory === 'Tất cả' || product.category === selectedCategory;
     return matchesName && matchesCategory;
   });
 
   // Tính tổng số sản phẩm và tổng tồn kho
   const totalProducts = filteredProducts.length;
-  const totalStock = filteredProducts.reduce(
-    (sum, product) => sum + product.stock,
-    0
-  );
+  const totalStock = filteredProducts.reduce((sum, product) => sum + product.stock, 0);
 
   return (
     <div className="container">
