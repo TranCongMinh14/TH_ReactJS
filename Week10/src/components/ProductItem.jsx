@@ -9,12 +9,6 @@ function ProductItem({ product, onDelete, onEdit }) {
       <td className="border border-gray-300 p-2">{product.stock}</td>
       <td className="border border-gray-300 p-2">
         <button
-          className="bg-blue-500 text-white px-2.5 py-1 rounded mr-1.5 hover:bg-blue-400"
-          onClick={() => onEdit(product)}
-        >
-          Sửa
-        </button>
-        <button
           className="bg-red-500 text-white px-2.5 py-1 rounded hover:bg-red-600"
           onClick={() => onDelete(product.id)}
         >
